@@ -1,43 +1,58 @@
 const getState = ({ getStore, getActions, setStore }) => {
+
+	const ApiUrl = `https:///www.swapi.tech/api/`
+
+	const fetchData = async (endpoint, storeKey) => {
+		try {
+			const response = await fetch(`${ApiUrl}${endpoint}/`);
+			const data = await response.json();
+			//console.log(data);
+
+			const imageEndpoint = endpoint === "people" ? "characters" : endpoint;
+	
+			const resultsWithImages = data.results.map(obj => ({
+				...obj,
+				imageUrl: `https://starwars-visualguide.com/assets/img/${imageEndpoint}/${obj.uid}.jpg`
+			}));
+		   
+			setStore({ [storeKey]: resultsWithImages });
+		} catch (error) {
+			console.error(`Error fetch ${storeKey}:`, error);
+		}
+	}
+	const fetchInformation = async (type, id) => {
+		try {
+			console.log(`${ApiUrl}${type}/${id}`);
+			const response = await fetch(`${ApiUrl}${type}/${id}`);
+			const data = await response.json();
+			setStore({ infoCharacter: data.result });
+		} catch (error) {
+			console.error(`Error fetch:`, error);
+		}
+	}
+
 	return {
 		store: {
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			listPeople: [],
+			listVehicles: [],
+			listPlanets: [],
+			infoCharacter: [],
+			listFavorites: []
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
+			getPeople: () => fetchData("people","listPeople"),
+			getVehicles: () => fetchData("vehicles","listVehicles"),
+			getPlanets: () => fetchData("planets","listPlanets"),
+			getInformation: (type, id) => fetchInformation(type, id),
+			addFavorites: (name) => {
+				setStore({listFavorites:getStore().listFavorites.concat(name)});
 			},
-			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
-			},
-			changeColor: (index, color) => {
-				//get the store
+			deleteFavoritos: (elemento) => {
 				const store = getStore();
+				const updatedFavoritos = store.listFavorites.filter((fav) => fav !== elemento);
+				setStore({ listFavorites: updatedFavoritos });
+			},
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
-			}
 		}
 	};
 };
