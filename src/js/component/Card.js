@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 
@@ -12,10 +11,10 @@ export const Card = props => {
         e.target.src = "https://www.tictacsoluciones.com/wp-content/uploads/2012/07/star-wars.png"
     }
 
-    console.log(props.item);
+    //console.log(props.item);
 
     return (
-        <div className="card" style={{ width: "18rem" }}>
+        <div className="card" style={{ width: "22rem" }}>
             <img onError={OnImageError} src={props.item.imageUrl} className="card-img-top" alt="..." />
             <div className="card-body">
                 <h5 className="card-title">{props.item.name}</h5>

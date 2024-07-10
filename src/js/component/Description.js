@@ -13,6 +13,7 @@ export const Description = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        actions.restartValues(type);
         if (type && theid && !isLoading) {
             setIsLoading(true);
             actions.getInformation(type, theid)
@@ -20,67 +21,69 @@ export const Description = () => {
         }
     }, [type, theid]);
 
+    function OnImageError(e) {
+        e.target.src = "https://www.tictacsoluciones.com/wp-content/uploads/2012/07/star-wars.png"
+    }
+
     let renderAtributes
 
     if (type === "people") {
 
         renderAtributes = (
             <>
-                <li>Gender: {store.infoCharacter?.properties?.gender}</li>
-                <li>Height: {store.infoCharacter?.properties?.height}</li>
-                <li>Mass: {store.infoCharacter?.properties?.mass}</li>
-                <li>Skin color: {store.infoCharacter?.properties?.skin_color}</li>
-                <li>Hair color: {store.infoCharacter?.properties?.hair_color}</li>
-                <li>Eye color: {store.infoCharacter?.properties?.eye_color}</li>
-                <li>Birth Year: {store.infoCharacter?.properties?.birth_year}</li>
+                <li>Gender: {store.infoDetails?.properties?.gender}</li>
+                <li>Height: {store.infoDetails?.properties?.height}</li>
+                <li>Mass: {store.infoDetails?.properties?.mass}</li>
+                <li>Skin color: {store.infoDetails?.properties?.skin_color}</li>
+                <li>Hair color: {store.infoDetails?.properties?.hair_color}</li>
+                <li>Eye color: {store.infoDetails?.properties?.eye_color}</li>
+                <li>Birth Year: {store.infoDetails?.properties?.birth_year}</li>
             </>
         );
     }
     else if (type === "planets") {
         renderAtributes = (
             <>
-                <li>Diameter: {store.infoCharacter?.properties?.diameter}</li>
-                <li>Rotation Period: {store.infoCharacter?.properties?.rotation_period}</li>
-                <li>Orbital Period: {store.infoCharacter?.properties?.orbital_period}</li>
-                <li>Gravity: {store.infoCharacter?.properties?.gravity}</li>
-                <li>Population: {store.infoCharacter?.properties?.population}</li>
-                <li>Climate: {store.infoCharacter?.properties?.climate}</li>
-                <li>Terrain: {store.infoCharacter?.properties?.terrain}</li>
-                <li>Surface Water: {store.infoCharacter?.properties?.surface_water}</li>
+                <li>Diameter: {store.infoDetails?.properties?.diameter}</li>
+                <li>Rotation Period: {store.infoDetails?.properties?.rotation_period}</li>
+                <li>Orbital Period: {store.infoDetails?.properties?.orbital_period}</li>
+                <li>Gravity: {store.infoDetails?.properties?.gravity}</li>
+                <li>Population: {store.infoDetails?.properties?.population}</li>
+                <li>Climate: {store.infoDetails?.properties?.climate}</li>
+                <li>Terrain: {store.infoDetails?.properties?.terrain}</li>
+                <li>Surface Water: {store.infoDetails?.properties?.surface_water}</li>
             </>
         );
     }
     else if (type === "vehicles") {
         renderAtributes = (
             <>
-                <li>Model: {store.infoCharacter?.properties?.model}</li>
-                <li>Vehicle Class:: {store.infoCharacter?.properties?.vehicle_class}</li>
-                <li>Manufacturer: {store.infoCharacter?.properties?.manufacturer}</li>
-                <li>Cost In Credits: {store.infoCharacter?.properties?.cost_in_credits}</li>
-                <li>Length: {store.infoCharacter?.properties?.length}</li>
-                <li>Crew: {store.infoCharacter?.properties?.crew}</li>
-                <li>Passengers: {store.infoCharacter?.properties?.passengers}</li>
-                <li>Max Atmosphering Speed: {store.infoCharacter?.properties?.max_atmosphering_speed}</li>
-                <li>Cargo Capacity: {store.infoCharacter?.properties?.cargo_capacity}</li>
-                <li>Consumables: {store.infoCharacter?.properties?.consumables}</li>
+                <li>Model: {store.infoDetails?.properties?.model}</li>
+                <li>Vehicle Class:: {store.infoDetails?.properties?.vehicle_class}</li>
+                <li>Manufacturer: {store.infoDetails?.properties?.manufacturer}</li>
+                <li>Cost In Credits: {store.infoDetails?.properties?.cost_in_credits}</li>
+                <li>Length: {store.infoDetails?.properties?.length}</li>
+                <li>Crew: {store.infoDetails?.properties?.crew}</li>
+                <li>Passengers: {store.infoDetails?.properties?.passengers}</li>
+                <li>Max Atmosphering Speed: {store.infoDetails?.properties?.max_atmosphering_speed}</li>
+                <li>Cargo Capacity: {store.infoDetails?.properties?.cargo_capacity}</li>
+                <li>Consumables: {store.infoDetails?.properties?.consumables}</li>
             </>
         );
     }
 
     return (
-
-
-        <div className="card mb-3" style={{ maxwidth: "540px" }}>
+        <div className="card mb-3" style={{ maxwidth: "600px" }}>
             <div className="row g-0">
                 <div className="col-md-4">
                     <img 
                         className="img-fluid rounded-start" 
-                        src={type === "people" ? `https://starwars-visualguide.com/assets/img/characters/${theid}.jpg` : `https://starwars-visualguide.com/assets/img/${type}/${theid}.jpg`} />
+                        onError={OnImageError} src={type === "people" ? `https://starwars-visualguide.com/assets/img/characters/${theid}.jpg` : `https://starwars-visualguide.com/assets/img/${type}/${theid}.jpg`} />
                 </div>
                 <div className="col-md-8">
                     <div className="card-body">
-                        <h2 className="card-title">{store.infoCharacter?.properties?.name}</h2>
-                        <p className="card-text">{store.infoCharacter?.description}</p>
+                        <h2 className="card-title">{store.infoDetails?.properties?.name}</h2>
+                        <p className="card-text">{store.infoDetails?.description}</p>
                         <ul>
                             {renderAtributes}
                         </ul>

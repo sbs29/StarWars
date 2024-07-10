@@ -6,15 +6,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 		try {
 			const response = await fetch(`${ApiUrl}${endpoint}/`);
 			const data = await response.json();
-			//console.log(data);
-
 			const imageEndpoint = endpoint === "people" ? "characters" : endpoint;
-	
 			const resultsWithImages = data.results.map(obj => ({
 				...obj,
 				imageUrl: `https://starwars-visualguide.com/assets/img/${imageEndpoint}/${obj.uid}.jpg`
-			}));
-		   
+			}));	   
 			setStore({ [storeKey]: resultsWithImages });
 		} catch (error) {
 			console.error(`Error fetch ${storeKey}:`, error);
@@ -25,7 +21,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			console.log(`${ApiUrl}${type}/${id}`);
 			const response = await fetch(`${ApiUrl}${type}/${id}`);
 			const data = await response.json();
-			setStore({ infoCharacter: data.result });
+			setStore({ infoDetails: data.result });
 		} catch (error) {
 			console.error(`Error fetch:`, error);
 		}
@@ -36,7 +32,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			listPeople: [],
 			listVehicles: [],
 			listPlanets: [],
-			infoCharacter: [],
+			infoDetails: [],
 			listFavorites: []
 		},
 		actions: {
@@ -45,14 +41,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getPlanets: () => fetchData("planets","listPlanets"),
 			getInformation: (type, id) => fetchInformation(type, id),
 			addFavorites: (name) => {
-				setStore({listFavorites:getStore().listFavorites.concat(name)});
+				if (!getStore().listFavorites.includes(name)) {
+					setStore({listFavorites:getStore().listFavorites.concat(name)});
+				}
 			},
-			deleteFavoritos: (elemento) => {
+			deleteFavoritos: (element) => {
 				const store = getStore();
-				const updatedFavoritos = store.listFavorites.filter((fav) => fav !== elemento);
-				setStore({ listFavorites: updatedFavoritos });
+				const favorites = store.listFavorites.filter((item) => item !== element);
+				setStore({ listFavorites: favorites });
 			},
-
+			restartValues: () => {
+				setStore({infoDetails:undefined})
+			}
 		}
 	};
 };
